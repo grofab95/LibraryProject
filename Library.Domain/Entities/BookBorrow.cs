@@ -10,5 +10,6 @@ namespace Library.Api.Entities
         public virtual Book Book { get; set; }
         public DateTime RentDate { get; set; }
         public bool IsBookReturned { get; set; }
+        public int BorrowCreatorId { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -23,17 +23,19 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 
+  
+
   <ItemGroup>
-    <ProjectReference Include="..\Library.BL\Library.Domain.csproj" />
-    <ProjectReference Include="..\Library.DAL\Library.MsSqlPersistance.csproj" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  
+
+  <ItemGroup>
     <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
     <ProjectReference Include="..\Library.FilePersistance\Library.FilePersistance.csproj" />
     <ProjectReference Include="..\Library.MsSqlPersistance\Library.MsSqlPersistance.csproj" />
     <ProjectReference Include="..\Library\Library.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

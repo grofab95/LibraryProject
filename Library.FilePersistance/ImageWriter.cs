@@ -3,6 +3,7 @@ using Library.FilePersistance.Helper;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Library.FilePersistance
@@ -43,6 +44,15 @@ namespace Library.FilePersistance
                 var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
                 fileName = Guid.NewGuid().ToString() + extension; 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+
+                var imageName = new ImageName
+                {
+                    Name = file.FileName,
+                    FullName = fileName
+                };
+
+                var json = JsonSerializer.Serialize<ImageName>(imageName);
+                FileUtility.SaveFile(json);
 
                 using (var bits = new FileStream(path, FileMode.Create))
                 {

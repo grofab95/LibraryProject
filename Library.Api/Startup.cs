@@ -15,6 +15,8 @@ using Library.Api.Handler;
 using Library.MsSqlPersistance.Dao;
 using Library.MsSqlPersistance;
 using Library.FilePersistance;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace Library.Api
 {
@@ -75,6 +77,7 @@ namespace Library.Api
                     ValidateAudience = false
                 };
             });
+
             services.AddScoped<IUserDao, UserDao>();
             services.AddScoped<IBookCategoryDao, BookCategoryDao>();
             services.AddScoped<IBookDao, BookDao>();
@@ -97,7 +100,7 @@ namespace Library.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
-            });                        
+            });
         }
     }
 }

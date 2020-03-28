@@ -1,10 +1,10 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "$schema": "http://json.schemastore.org/launch.settings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51869",
+      "applicationUrl": "http://192.168.0.10:51869",
       "sslPort": 0
     }
   },
@@ -21,7 +21,7 @@
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "weatherforecast",
-      "applicationUrl": "http://192.168.0.5:4000",
+      "applicationUrl": "http://192.168.0.10:4000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

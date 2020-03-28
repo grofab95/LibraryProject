@@ -13,7 +13,8 @@ namespace Library.Api
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
-                {
+                {                    
+                    webBuilder.UseUrls("http://192.168.0.15:4000/");
                     webBuilder.UseStartup<Startup>();
                 });
     }

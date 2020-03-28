@@ -59,16 +59,20 @@ namespace Library.Api.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var token2 = tokenHandler.WriteToken(token);
 
-            return Ok(new
+            return Ok(new UserDto
             {
                 Id = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                AccountType = user.AccountType,
                 AccountTypeId = user.AccountTypeId,
-                Token = token2,                
-                ExpirationIn = tokenDescriptor.Expires
-            }); 
+                Auth = new Auth
+                {
+                    Token = token2,
+                    ExpirationIn = tokenDescriptor.Expires
+                }
+            });
         }
 
         [AllowAnonymous]
@@ -86,6 +90,7 @@ namespace Library.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {

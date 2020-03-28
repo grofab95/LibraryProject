@@ -50,6 +50,7 @@ namespace Library.MsSqlPersistance.Dao
         public void Update(Book book)
         {
             var bookDB = _context.Books.Find(book.Id);
+            bookDB.ImageId = book.ImageId;
 
             if (bookDB == null)
             {

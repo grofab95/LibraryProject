@@ -10,6 +10,7 @@ namespace Library.Api.UsersDto
         public string Email { get; set; }
         public AccountTypeEnum AccountTypeId { get; set; }
         public virtual AccountType AccountType { get; set; }
+        public virtual Auth Auth { get; set; }
     }
 }
 

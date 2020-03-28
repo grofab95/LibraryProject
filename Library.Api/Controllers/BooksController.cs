@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Library.Api.Adapters;
 using Library.Api.Entities;
 using Library.Api.BooksDto;
+using System.Linq;
 
 namespace Library.Api.Controllers
 {
@@ -32,7 +33,8 @@ namespace Library.Api.Controllers
             try
             {
                 _bookDao.Create(_mapper.Map<Book>(bookRegisterDto));
-                return Ok();
+                var id = GetBookId(bookRegisterDto);
+                return Ok(id);
             }
             catch (LibraryException exception)
             {
@@ -80,6 +82,20 @@ namespace Library.Api.Controllers
         {
             _bookDao.Delete(id);
             return Ok();
+        }
+
+        private int GetBookId(BookRegisterDto bookRegisterDto)
+        {
+            var book = _bookDao.GetAll()
+                     .FirstOrDefault(x => x.Title == bookRegisterDto.Title &&
+                                     x.Author == bookRegisterDto.Author);
+
+            if (book == null)
+            {
+                throw new Exception("Błąd podczas pobierania id książki");
+            }
+
+            return book.Id;                                     
         }
     }
 }

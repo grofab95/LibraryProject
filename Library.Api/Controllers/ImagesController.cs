@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Library.Api.Handler;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@ namespace Library.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
-            var uploadStatus =  await _imageHandler.UploadImage(file);
+            var uploadStatus = await _imageHandler.UploadImage(file);
             var uploadStatusTxt = uploadStatus.ToString();
             if (uploadStatusTxt == "Invalid")
             {
@@ -35,6 +36,22 @@ namespace Library.Api.Controllers
         public IActionResult RemoveImage(string imageName)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public IActionResult GetImageName()
+        {
+            var file = FileUtility.ReadFile();
+
+            if (file == null)
+            {
+                FileUtility.SaveFile(string.Empty);
+                return BadRequest();
+            }
+            
+            var imageName = JsonSerializer.Deserialize<ImageName>(file);
+            FileUtility.SaveFile(string.Empty);
+            return Ok(imageName);
         }
     }
 }

@@ -53,11 +53,14 @@ namespace Library.MsSqlPersistance.Dao
             {
                 throw new EmailAlreadyTaken(user.Email);
             }
-            if (_context.Users.Any(x => 
-                x.FirstName == user.FirstName &&
-                x.LastName == user.LastName))
+            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
             {
-                throw new UserAlreadyTaken(user.FirstName, user.LastName);
+                if (_context.Users.Any(x =>
+                    x.FirstName == user.FirstName &&
+                    x.LastName == user.LastName))
+                {
+                    throw new UserAlreadyTaken(user.FirstName, user.LastName);
+                }
             }
             byte[] passwordHash, passwordSalt;
             PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);

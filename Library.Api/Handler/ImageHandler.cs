@@ -7,7 +7,7 @@ namespace Library.Api.Handler
 {
     public interface IImageHandler
     {
-        Task<IActionResult> UploadImage(IFormFile file);
+        Task<string> UploadImage(IFormFile file);
     }
 
     public class ImageHandler : IImageHandler
@@ -18,10 +18,9 @@ namespace Library.Api.Handler
             _imageWriter = imageWriter;
         }
 
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<string> UploadImage(IFormFile file)
         {
-            var result = await _imageWriter.UploadImage(file);
-            return new ObjectResult(result);
+            return await _imageWriter.UploadImage(file);
         }
 
         public async Task<IActionResult> RemoveImage(string imageName)

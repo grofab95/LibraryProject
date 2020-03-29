@@ -45,7 +45,8 @@ namespace Library.Api.Controllers
                 return BadRequest(new { message = exception.InnerException.Message });            
             }
         }
-                
+
+        [Authorize]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -84,18 +85,17 @@ namespace Library.Api.Controllers
             return Ok();
         }
 
-        private int GetBookId(BookRegisterDto bookRegisterDto)
+        private int GetBookId(BookRegisterDto bookReg)
         {
             var book = _bookDao.GetAll()
-                     .FirstOrDefault(x => x.Title == bookRegisterDto.Title &&
-                                     x.Author == bookRegisterDto.Author);
+                .FirstOrDefault(x => x.Title == bookReg.Title && x.Author == bookReg.Author);
 
             if (book == null)
             {
                 throw new Exception("Błąd podczas pobierania id książki");
             }
 
-            return book.Id;                                     
+            return book.Id;
         }
     }
 }

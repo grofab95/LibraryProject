@@ -1,4 +1,4 @@
-﻿namespace Library.Api.Enums
+﻿namespace Library.Domain.Enums
 {
     public enum AccountTypeEnum
     {

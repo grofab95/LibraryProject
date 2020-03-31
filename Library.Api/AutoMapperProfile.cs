@@ -2,8 +2,8 @@
 using Library.Api.BookBorrowsDto;
 using Library.Api.BookCategoriesDto;
 using Library.Api.BooksDto;
-using Library.Api.Entities;
 using Library.Api.UsersDto;
+using Library.Domain.Entities;
 
 namespace Library.Api
 {

@@ -1,6 +1,6 @@
-﻿using Library.Api.Enums;
+﻿using Library.Domain.Enums;
 
-namespace Library.Api
+namespace Library.Domain
 {
     public class AccountType
     {

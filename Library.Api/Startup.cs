@@ -51,30 +51,43 @@ namespace Library.Api
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(bearer =>
+            //.AddJwtBearer(bearer =>
+            //{
+            //    bearer.Events = new JwtBearerEvents
+            //    {
+            //        OnTokenValidated = context =>
+            //        {
+            //            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserDao>();
+            //            var userId = int.Parse(context.Principal.Identity.Name);
+            //            var user = userService.GetById(userId);
+            //            if (user == null)
+            //            {
+            //                context.Fail("Unauthorized");
+            //            }
+            //            return Task.CompletedTask;
+            //        }
+            //    };
+            //    bearer.RequireHttpsMetadata = false;
+            //    bearer.SaveToken = true;
+            //    bearer.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false
+            //    };
+            //});
+            .AddJwtBearer(x =>
             {
-                bearer.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserDao>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetById(userId);
-                        if (user == null)
-                        {
-                            context.Fail("Unauthorized");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-                bearer.RequireHttpsMetadata = false;
-                bearer.SaveToken = true;
-                bearer.TokenValidationParameters = new TokenValidationParameters
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 

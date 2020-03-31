@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Library.Api.Adapters;
-using Library.Api.Entities;
 using Library.Api.BooksDto;
 using System.Linq;
+using Library.Domain.Entities;
 
 namespace Library.Api.Controllers
 {

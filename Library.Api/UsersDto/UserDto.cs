@@ -1,4 +1,5 @@
-﻿using Library.Api.Enums;
+﻿using Library.Domain;
+using Library.Domain.Enums;
 
 namespace Library.Api.UsersDto
 {

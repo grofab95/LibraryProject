@@ -1,4 +1,5 @@
-﻿using Library.Api.Enums;
+﻿using Library.Domain;
+using Library.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Api.UsersDto
@@ -10,8 +11,8 @@ namespace Library.Api.UsersDto
         public string LastName { get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)]
-        [EmailAddress]
+        //[DataType(DataType.EmailAddress)]
+       // [EmailAddress]
         public string Email { get; set; }
         
         [Required]

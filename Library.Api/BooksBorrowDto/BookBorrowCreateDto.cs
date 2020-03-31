@@ -1,4 +1,4 @@
-﻿using Library.Api.Entities;
+﻿using Library.Domain.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 

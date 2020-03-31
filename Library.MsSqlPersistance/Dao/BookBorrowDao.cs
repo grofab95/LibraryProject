@@ -1,5 +1,5 @@
 ﻿using Library.Api.Adapters;
-using Library.Api.Entities;
+using Library.Domain.Entities;
 using Library.Exceptions;
 using System;
 using System.Collections.Generic;

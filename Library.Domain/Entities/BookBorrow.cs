@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Library.Api.Entities
+namespace Library.Domain.Entities
 {
     public class BookBorrow
     {

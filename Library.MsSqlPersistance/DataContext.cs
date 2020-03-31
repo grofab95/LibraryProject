@@ -1,4 +1,4 @@
-﻿using Library.Api.Entities;
+﻿using Library.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +13,7 @@ namespace Library.MsSqlPersistance
         public DbSet<BookCategory> BookCategories { get; set; }   
         public DbSet<Book> Books { get; set; }
         public DbSet<BookBorrow> BookBorrows { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DataContext>

@@ -1,9 +1,9 @@
 ﻿using Library.Domain.Entities;
 using System.Collections.Generic;
 
-namespace Library.Api.Adapters
+namespace Library.Domain.Adapters
 {
-    public interface IBookBorrow
+    public interface IBookBorrowDao
     {
         IEnumerable<BookBorrow> GetAll();
         BookBorrow GetById(int id);

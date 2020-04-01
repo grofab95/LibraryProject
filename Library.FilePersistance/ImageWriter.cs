@@ -1,4 +1,4 @@
-﻿using Library.Api.Adapters;
+﻿using Library.Domain.Adapters;
 using Library.FilePersistance.Helper;
 using Microsoft.AspNetCore.Http;
 using System;

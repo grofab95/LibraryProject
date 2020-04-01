@@ -8,7 +8,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Library.Api.Adapters;
 using Library.Exceptions;
 using Library.Api.UsersDto;
 using System.Threading.Tasks;
@@ -17,6 +16,8 @@ using Library.Domain.Entities;
 using Library.MsSqlPersistance;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Library.Configs;
+using Library.Domain.Adapters;
 
 namespace Library.Api.Controllers
 {
@@ -27,19 +28,18 @@ namespace Library.Api.Controllers
     {
         private IUserDao _userDao;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;
         private LibraryContext _dataContext;
+        private string _secret;
 
         public UsersController(
             IUserDao userDao,
             IMapper mapper,
-            IOptions<AppSettings> appSettings,
             LibraryContext dataContext)
         {
             _userDao = userDao;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
             _dataContext = dataContext;
+            _secret = Config.Get().TokenSecret;
         }
 
         [AllowAnonymous]
@@ -186,7 +186,7 @@ namespace Library.Api.Controllers
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var key = Encoding.ASCII.GetBytes(_secret);
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {
@@ -234,7 +234,7 @@ namespace Library.Api.Controllers
         private string GenerateAccessToken(int userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

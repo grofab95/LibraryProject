@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Library.Configs\Library.Configs.csproj" />
     <ProjectReference Include="..\Library.MsSqlPersistance\Library.MsSqlPersistance.csproj" />
   </ItemGroup>
 

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using Library.Api.Adapters;
 using Library.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Library.Api.BookCategoriesDto;
 using Library.Domain.Entities;
+using Library.Domain.Adapters;
 
 namespace Library.Api.Controllers
 {

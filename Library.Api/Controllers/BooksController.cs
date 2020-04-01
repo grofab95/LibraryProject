@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Library.Api.Adapters;
 using Library.Api.BooksDto;
 using System.Linq;
 using Library.Domain.Entities;
+using Library.Domain.Adapters;
 
 namespace Library.Api.Controllers
 {

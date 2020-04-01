@@ -1,25 +1,25 @@
 ﻿using AutoMapper;
 using Library.Api.BookBorrowsDto;
-using Library.Api.Adapters;
 using Library.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using Library.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Library.Domain.Adapters;
 
 namespace Library.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BookBorrowsController : ControllerBase
     {
-        private IBookBorrow _bookBorrow;
+        private IBookBorrowDao _bookBorrow;
         private IMapper _mapper;
 
         public BookBorrowsController(
-            IBookBorrow bookBorrow,
+            IBookBorrowDao bookBorrow,
             IMapper mapper)
         {
             _bookBorrow = bookBorrow;

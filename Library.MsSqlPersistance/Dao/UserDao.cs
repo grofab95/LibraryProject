@@ -1,4 +1,4 @@
-﻿using Library.Api.Adapters;
+﻿using Library.Domain.Adapters;
 using Library.Domain.Entities;
 using Library.Exceptions;
 using Library.Exceptions.AuthExceptions;

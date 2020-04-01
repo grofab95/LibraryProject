@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace Library.Api.Adapters
+namespace Library.Domain.Adapters
 {
     public interface IImageWriter
     {

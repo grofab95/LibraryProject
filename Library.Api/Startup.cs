@@ -1,22 +1,18 @@
-using System.Threading.Tasks;
+using AutoMapper;
+using Library.Api.Handler;
+using Library.Configs;
+using Library.Domain.Adapters;
+using Library.FilePersistance;
+using Library.MsSqlPersistance;
+using Library.MsSqlPersistance.Dao;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Library.Api.Adapters;
-using Library.Api.Handler;
-using Library.MsSqlPersistance.Dao;
-using Library.MsSqlPersistance;
-using Library.FilePersistance;
-using Microsoft.AspNetCore.HttpOverrides;
-using System.Net;
+using System.Text;
 
 namespace Library.Api
 {
@@ -37,10 +33,7 @@ namespace Library.Api
             services.AddCors();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Config.Get().TokenSecret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -63,8 +56,8 @@ namespace Library.Api
             services.AddScoped<IUserDao, UserDao>();
             services.AddScoped<IBookCategoryDao, BookCategoryDao>();
             services.AddScoped<IBookDao, BookDao>();
-            services.AddScoped<IBookBorrow, BookBorrowDao>();
-
+            services.AddScoped<IBookBorrowDao, BookBorrowDao>();
+            services.AddScoped<IAccountTypeDao, AccountTypeDao>();
             services.AddTransient<IImageHandler, ImageHandler>();
             services.AddTransient<IImageWriter, ImageWriter>();
         }

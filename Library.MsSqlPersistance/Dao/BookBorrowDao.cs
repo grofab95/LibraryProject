@@ -1,4 +1,4 @@
-﻿using Library.Api.Adapters;
+﻿using Library.Domain.Adapters;
 using Library.Domain.Entities;
 using Library.Exceptions;
 using System;
@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Library.MsSqlPersistance.Dao
 {
-    public class BookBorrowDao : IBookBorrow
+    public class BookBorrowDao : IBookBorrowDao
     {
         private LibraryContext _context;
 

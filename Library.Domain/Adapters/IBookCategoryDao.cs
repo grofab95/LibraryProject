@@ -1,7 +1,7 @@
 ﻿using Library.Domain.Entities;
 using System.Collections.Generic;
 
-namespace Library.Api.Adapters
+namespace Library.Domain.Adapters
 {
     public interface IBookCategoryDao
     {

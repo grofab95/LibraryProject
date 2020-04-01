@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.MsSqlPersistance.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(LibraryContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -19,20 +19,22 @@ namespace Library.MsSqlPersistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Library.Api.AccountType", b =>
+            modelBuilder.Entity("Library.Domain.Entities.AccountType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AccountType");
+                    b.ToTable("AccountTypes");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.Book", b =>
+            modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +72,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.BookBorrow", b =>
+            modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,7 +103,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.ToTable("BookBorrows");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.BookCategory", b =>
+            modelBuilder.Entity("Library.Domain.Entities.BookCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,7 +118,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.ToTable("BookCategories");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Library.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +144,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.User", b =>
+            modelBuilder.Entity("Library.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,6 +152,9 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccountTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AccountTypeId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -169,51 +174,49 @@ namespace Library.MsSqlPersistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountTypeId");
+                    b.HasIndex("AccountTypeId1");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.Book", b =>
+            modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
-                    b.HasOne("Library.Api.Entities.BookCategory", "BookCategory")
+                    b.HasOne("Library.Domain.Entities.BookCategory", "BookCategory")
                         .WithMany()
                         .HasForeignKey("BookCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.BookBorrow", b =>
+            modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
                 {
-                    b.HasOne("Library.Api.Entities.Book", "Book")
+                    b.HasOne("Library.Domain.Entities.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.Api.Entities.User", "User")
+                    b.HasOne("Library.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Library.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("Library.Api.Entities.User", "User")
+                    b.HasOne("Library.Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Library.Api.Entities.User", b =>
+            modelBuilder.Entity("Library.Domain.Entities.User", b =>
                 {
-                    b.HasOne("Library.Api.AccountType", "AccountType")
+                    b.HasOne("Library.Domain.Entities.AccountType", "AccountType")
                         .WithMany()
-                        .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountTypeId1");
                 });
 #pragma warning restore 612, 618
         }

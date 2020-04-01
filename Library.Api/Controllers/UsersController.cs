@@ -22,19 +22,19 @@ namespace Library.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private IUserDao _userDao;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
-        private DataContext _dataContext;
+        private LibraryContext _dataContext;
 
         public UsersController(
             IUserDao userDao,
             IMapper mapper,
             IOptions<AppSettings> appSettings,
-            DataContext dataContext)
+            LibraryContext dataContext)
         {
             _userDao = userDao;
             _mapper = mapper;
@@ -46,62 +46,25 @@ namespace Library.Api.Controllers
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserWithToken>> Login([FromBody]UserAuthenticateDto userAuthenticateDto)
         {
-            var user = _userDao.Authenticate(userAuthenticateDto.Email, userAuthenticateDto.Password);
-
-            UserWithToken userWithToken = null;
-
-            if (user != null)
+            try
             {
-                RefreshToken refreshToken = GenerateRefreshToken();
+                var user = _userDao.Authenticate(userAuthenticateDto.Email, userAuthenticateDto.Password);
+
+                var refreshToken = GenerateRefreshToken();
                 user.RefreshTokens.Add(refreshToken);
                 await _dataContext.SaveChangesAsync();
 
-                userWithToken = new UserWithToken(user);
+                var userWithToken = new UserWithToken(user);
                 userWithToken.RefreshToken = refreshToken.Token;
-            }
+                userWithToken.AccessToken = GenerateAccessToken(user.Id);
 
-            if (userWithToken == null)
+                return userWithToken;
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-
-            //sign your token here here..
-            userWithToken.AccessToken = GenerateAccessToken(user.Id);
-            return userWithToken;
         }
-
-        //[AllowAnonymous] // rejestracja + zalogowanie sie (utworzenie tokenu)
-        //[HttpPost("register")]
-        //public async Task<ActionResult<UserWithToken>> RegisterUser([FromBody]UserCreateDto userCreateDto)
-        //{
-        //    var user = _mapper.Map<User>(userCreateDto);
-        //    _userDao.Create(user, userCreateDto.Password);
-
-        //    //load role for registered user
-        //    //user = await _context.Users.Include(u => u.Role)
-        //    //                            .Where(u => u.UserId == user.UserId).FirstOrDefaultAsync();
-
-        //    UserWithToken userWithToken = null;
-
-        //    if (user != null)
-        //    {
-        //        RefreshToken refreshToken = GenerateRefreshToken();
-        //        user.RefreshTokens.Add(refreshToken);
-        //        await _dataContext.SaveChangesAsync();
-
-        //        userWithToken = new UserWithToken(user);
-        //        userWithToken.RefreshToken = refreshToken.Token;
-        //    }
-
-        //    if (userWithToken == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //sign your token here here..
-        //    userWithToken.AccessToken = GenerateAccessToken(user.Id);
-        //    return userWithToken;
-        //}
 
         [AllowAnonymous]
         [HttpPost("register")]
@@ -118,7 +81,6 @@ namespace Library.Api.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -173,8 +135,7 @@ namespace Library.Api.Controllers
         //    return tokenHandler.WriteToken(token);
         //}
 
-        // GET: api/Users
-        [HttpPost("RefreshToken")]
+        [HttpPost("token/refresh")]
         public async Task<ActionResult<UserWithToken>> RefreshToken([FromBody] RefreshRequest refreshRequest)
         {
             User user = await GetUserFromAccessToken(refreshRequest.AccessToken);
@@ -190,9 +151,8 @@ namespace Library.Api.Controllers
             return null;
         }
 
-        // GET: api/Users
         [AllowAnonymous]
-        [HttpPost("GetUserByAccessToken")]
+        [HttpPost("token/getUser")]
         public async Task<ActionResult<User>> GetUserByAccessToken([FromBody] string accessToken)
         {
             User user = await GetUserFromAccessToken(accessToken);

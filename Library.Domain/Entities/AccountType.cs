@@ -1,10 +1,10 @@
 ﻿using Library.Domain.Enums;
 
-namespace Library.Domain
+namespace Library.Domain.Entities
 {
     public class AccountType
     {
-        public AccountTypeEnum Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

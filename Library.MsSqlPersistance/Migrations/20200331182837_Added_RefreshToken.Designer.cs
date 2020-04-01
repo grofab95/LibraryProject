@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.MsSqlPersistance.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20200331182837_Added_RefreshToken")]
     partial class Added_RefreshToken
     {

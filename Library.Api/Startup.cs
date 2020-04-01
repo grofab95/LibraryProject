@@ -33,12 +33,7 @@ namespace Library.Api
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            services.AddDbContext<DataContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
+            services.AddDbContext<LibraryContext>();
             services.AddCors();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -51,32 +46,6 @@ namespace Library.Api
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            //.AddJwtBearer(bearer =>
-            //{
-            //    bearer.Events = new JwtBearerEvents
-            //    {
-            //        OnTokenValidated = context =>
-            //        {
-            //            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserDao>();
-            //            var userId = int.Parse(context.Principal.Identity.Name);
-            //            var user = userService.GetById(userId);
-            //            if (user == null)
-            //            {
-            //                context.Fail("Unauthorized");
-            //            }
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //    bearer.RequireHttpsMetadata = false;
-            //    bearer.SaveToken = true;
-            //    bearer.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false
-            //    };
-            //});
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;

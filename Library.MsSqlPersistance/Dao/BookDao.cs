@@ -8,9 +8,9 @@ namespace Library.MsSqlPersistance.Dao
 {
     public class BookDao : IBookDao
     {
-        private DataContext _context;
+        private LibraryContext _context;
 
-        public BookDao(DataContext context)
+        public BookDao(LibraryContext context)
         {
             _context = context;
         }

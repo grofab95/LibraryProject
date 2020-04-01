@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Library.Api.Handler;
+﻿using Library.Api.Handler;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase
@@ -29,11 +30,11 @@ namespace Library.Api.Controllers
                 var uploadStatusTxt = uploadStatus.ToString();
                 if (uploadStatusTxt == "Invalid")
                 {
-                    return BadRequest("Invalid file format");
+                    return BadRequest("Niepoprawny format pliku");
                 }
                 else
                 {
-                    return Ok(uploadStatus);
+                    return Ok(new { ImagePath = uploadStatus });
                 }
             }
             catch (Exception ex)

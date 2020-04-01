@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.MsSqlPersistance.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20191129233834_first_")]
     partial class first_
     {

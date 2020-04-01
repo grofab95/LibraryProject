@@ -12,7 +12,7 @@ using Library.Domain.Entities;
 namespace Library.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BooksController : ControllerBase
     {
         private IBookDao _bookDao;

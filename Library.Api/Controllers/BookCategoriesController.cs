@@ -11,7 +11,7 @@ namespace Library.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BookCategoriesController : ControllerBase
     {
         private IBookCategoryDao _bookCategoryDao;

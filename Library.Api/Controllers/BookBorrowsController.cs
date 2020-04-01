@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using Library.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class BookBorrowsController : ControllerBase

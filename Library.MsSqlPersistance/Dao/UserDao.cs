@@ -1,6 +1,7 @@
 ﻿using Library.Api.Adapters;
 using Library.Domain.Entities;
 using Library.Exceptions;
+using Library.Exceptions.AuthExceptions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +9,9 @@ namespace Library.MsSqlPersistance.Dao
 {
     public class UserDao : IUserDao
     {
-        private DataContext _context;
+        private LibraryContext _context;
 
-        public UserDao(DataContext context)
+        public UserDao(LibraryContext context)
         {
             _context = context;
         }
@@ -19,17 +20,17 @@ namespace Library.MsSqlPersistance.Dao
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                return null;
+                throw new NotAllFieldWasRefiled();
             }
-            var user = _context.Users.SingleOrDefault(x => x.Email == email);
-            if (user == null)
-            {
-                return null;
-            }
+
+            var user = _context.Users.SingleOrDefault(x => x.Email == email)
+                ?? throw new EmailNotExist(email);
+
             if (!PasswordHash.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
-                return null;
+                throw new WrongPassword();
             }
+
             return user;
         }
 

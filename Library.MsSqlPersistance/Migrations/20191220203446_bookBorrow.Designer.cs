@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.MsSqlPersistance.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20191220203446_bookBorrow")]
     partial class bookBorrow
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Library.Api.AccountsTypesDto;
 using Library.Api.BookBorrowsDto;
 using Library.Api.BookCategoriesDto;
 using Library.Api.BooksDto;
@@ -14,6 +15,8 @@ namespace Library.Api
             CreateMap<User, UserDto>();
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
+
+            CreateMap<AccountType, AccountTypeDto>();
 
             CreateMap<BookCategory, BookCategoryDto>();
             CreateMap<BookCategoryRegisterDto, BookCategory>();

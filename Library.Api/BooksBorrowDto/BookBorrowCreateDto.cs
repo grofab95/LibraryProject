@@ -7,12 +7,12 @@ namespace Library.Api.BookBorrowsDto
     public class BookBorrowCreateDto
     {
         [Required]
-        public int UserId { get; set; }
         public virtual User User { get; set; }
         [Required]
-        public int BookId { get; set; }
-        public virtual Book Book { get; set; }        
-        public DateTime BorrowDate { get; set; }
+        public virtual Book Book { get; set; }
+        public DateTime RentDate { get; set; }
         public bool IsBookReturned { get; set; }
+        [Required]
+        public int BorrowCreatorId { get; set; }
     }
 }

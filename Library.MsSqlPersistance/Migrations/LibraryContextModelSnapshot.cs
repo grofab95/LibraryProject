@@ -4,16 +4,14 @@ using Library.MsSqlPersistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.MsSqlPersistance.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20191220203446_bookBorrow")]
-    partial class bookBorrow
+    partial class LibraryContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,17 +19,21 @@ namespace Library.MsSqlPersistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Library.Domain.AccountType", b =>
+            modelBuilder.Entity("Library.Domain.Entities.AccountType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AccountType");
+                    b.ToTable("AccountTypes");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
@@ -50,7 +52,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookCategoryId")
+                    b.Property<int?>("BookCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatorId")
@@ -82,10 +84,16 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BorrowCreatorId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsBookReturned")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("RentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
@@ -108,11 +116,39 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("BookCategories");
+                });
+
+            modelBuilder.Entity("Library.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TokenId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.User", b =>
@@ -122,7 +158,7 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountTypeId")
+                    b.Property<int?>("AccountTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -150,22 +186,27 @@ namespace Library.MsSqlPersistance.Migrations
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
                     b.HasOne("Library.Domain.Entities.BookCategory", "BookCategory")
-                        .WithMany()
-                        .HasForeignKey("BookCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Books")
+                        .HasForeignKey("BookCategoryId");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
                 {
                     b.HasOne("Library.Domain.Entities.Book", "Book")
-                        .WithMany()
+                        .WithMany("BookBorrows")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Library.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("BookBorrows")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Library.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Library.Domain.Entities.User", "User")
+                        .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,11 +214,9 @@ namespace Library.MsSqlPersistance.Migrations
 
             modelBuilder.Entity("Library.Domain.Entities.User", b =>
                 {
-                    b.HasOne("Library.Domain.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Library.Domain.Entities.AccountType", "AccountType")
+                        .WithMany("Users")
+                        .HasForeignKey("AccountTypeId");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,6 +9,7 @@ namespace Library.Domain.Entities
         public int BookId { get; set; }
         public virtual Book Book { get; set; }
         public DateTime RentDate { get; set; }
+        public DateTime ReturnDate { get; set; }
         public bool IsBookReturned { get; set; }
         public int BorrowCreatorId { get; set; }
     }

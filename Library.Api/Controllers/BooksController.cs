@@ -50,6 +50,7 @@ namespace Library.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            var tt = _bookDao.GetAll();
             return Ok(_mapper.Map<IList<BookDto>>(_bookDao.GetAll()));
         }
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.MsSqlPersistance.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20200401192729_added accountTypes")]
-    partial class addedaccountTypes
+    [Migration("20200402174929_changed-book-category")]
+    partial class changedbookcategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,8 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -52,7 +54,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookCategoryId")
+                    b.Property<int?>("BookCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatorId")
@@ -113,6 +115,8 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -153,10 +157,7 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AccountTypeId1")
+                    b.Property<int?>("AccountTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -176,7 +177,7 @@ namespace Library.MsSqlPersistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountTypeId1");
+                    b.HasIndex("AccountTypeId");
 
                     b.ToTable("Users");
                 });
@@ -184,10 +185,8 @@ namespace Library.MsSqlPersistance.Migrations
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
                     b.HasOne("Library.Domain.Entities.BookCategory", "BookCategory")
-                        .WithMany()
-                        .HasForeignKey("BookCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Books")
+                        .HasForeignKey("BookCategoryId");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
@@ -217,8 +216,8 @@ namespace Library.MsSqlPersistance.Migrations
             modelBuilder.Entity("Library.Domain.Entities.User", b =>
                 {
                     b.HasOne("Library.Domain.Entities.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeId1");
+                        .WithMany("Users")
+                        .HasForeignKey("AccountTypeId");
                 });
 #pragma warning restore 612, 618
         }

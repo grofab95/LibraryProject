@@ -57,8 +57,8 @@ namespace Library.Api.Controllers
                 var userWithToken = new UserWithToken(user);
                 userWithToken.RefreshToken = refreshToken.Token;
                 userWithToken.AccessToken = GenerateAccessToken(user.Id);
-
-                return userWithToken;
+                userWithToken.AccountType.Users = null;
+                return Ok(userWithToken);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,6 @@ namespace Library.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var yyy = _dataContext.Users.ToList();
             return Ok(_mapper.Map<IList<UserDto>>(_userDao.GetAll()));
         }
 

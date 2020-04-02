@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.Api.BookBorrowsDto
 {
@@ -8,5 +9,6 @@ namespace Library.Api.BookBorrowsDto
         public int Id { get; set; }
         [Required]
         public bool IsBookReturned { get; set; }
+        public DateTime ReturnDate { get; set; }
     }
 }

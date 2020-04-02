@@ -2,6 +2,7 @@
 using Library.Domain.Entities;
 using Library.Exceptions;
 using Library.Exceptions.AuthExceptions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +24,7 @@ namespace Library.MsSqlPersistance.Dao
                 throw new NotAllFieldWasRefiled();
             }
 
-            var user = _context.Users.SingleOrDefault(x => x.Email == email)
+            var user = _context.Users.Include(y => y.AccountType).SingleOrDefault(x => x.Email == email)
                 ?? throw new EmailNotExist(email);
 
             if (!PasswordHash.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
@@ -36,12 +37,12 @@ namespace Library.MsSqlPersistance.Dao
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return _context.Users.Include(y => y.AccountType);
         }
 
         public User GetById(int id)
         {
-            return _context.Users.Find(id);
+            return _context.Users.Include(y => y.AccountType).FirstOrDefault(x => x.Id == id);
         }
 
         public User Create(User user, string password)
@@ -67,8 +68,14 @@ namespace Library.MsSqlPersistance.Dao
             PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+
+            var accountType = _context.AccountTypes.First(x => x.Name == Domain.Enums.AccountTypeName.Admin);
+            user.AccountType = accountType;
+
             _context.Users.Add(user);
             _context.SaveChanges();
+
+
             return user;
         }
 

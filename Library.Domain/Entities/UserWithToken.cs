@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Library.Domain.Entities
+﻿namespace Library.Domain.Entities
 {
     public class UserWithToken : User
     {
@@ -16,7 +12,6 @@ namespace Library.Domain.Entities
             this.FirstName = user.FirstName;
             this.LastName = user.LastName;
             this.AccountType = user.AccountType;
-            this.AccountTypeId = user.AccountTypeId;
         }
     }
 }

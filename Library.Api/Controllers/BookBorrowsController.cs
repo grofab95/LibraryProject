@@ -27,7 +27,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody]BookBorrowCreateDto bookBorrowCreateDto)
+        public IActionResult New([FromBody]BookBorrowCreateDto bookBorrowCreateDto)
         {
             try
             {
@@ -47,7 +47,8 @@ namespace Library.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetAll()));
+            return Ok(_bookBorrow.GetAll());
+            //return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetAll()));
         }
 
         [HttpGet("{id}")]

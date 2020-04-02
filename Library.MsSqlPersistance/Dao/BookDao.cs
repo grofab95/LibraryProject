@@ -1,6 +1,7 @@
 ﻿using Library.Domain.Adapters;
 using Library.Domain.Entities;
 using Library.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,7 +40,9 @@ namespace Library.MsSqlPersistance.Dao
 
         public IEnumerable<Book> GetAll()
         {
-            return _context.Books;
+            return _context.Books
+                .Include(x => x.BookCategory)
+                .Include(x => x.BookBorrows);
         }
 
         public Book GetById(int id)

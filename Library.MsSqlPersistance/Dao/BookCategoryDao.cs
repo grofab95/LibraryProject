@@ -17,11 +17,6 @@ namespace Library.MsSqlPersistance.Dao
 
         public BookCategory Create(BookCategory bookCategory)
         {
-            if (string.IsNullOrWhiteSpace(bookCategory.Name))
-            {
-                throw new LibraryException("Category name is required");
-            }
-
             if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
             {
                 throw new LibraryException($"Category name: {bookCategory.Name} is already taken");
@@ -61,15 +56,12 @@ namespace Library.MsSqlPersistance.Dao
             {
                 throw new LibraryException("Book category not found");
             }
-            
-            if (!string.IsNullOrWhiteSpace(bookCategory.Name) && (bookCategory.Name == category.Name))
+
+            if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
             {
-                if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
-                {
-                    throw new LibraryException($"Book category name: {bookCategory.Name} is already taken");
-                }
-                category.Name = bookCategory.Name;
+                throw new LibraryException($"Book category name: {bookCategory.Name} is already taken");
             }
+
             _context.BookCategories.Update(category);
             _context.SaveChanges();
         }

@@ -1,5 +1,4 @@
-﻿using Library.Domain.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Library.Domain.Entities
 {
@@ -16,8 +15,8 @@ namespace Library.Domain.Entities
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public AccountTypeEnum AccountTypeId { get; set; }
         public virtual AccountType AccountType { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+        public virtual ICollection<BookBorrow> BookBorrows { get; set; }
     }
 }

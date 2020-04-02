@@ -82,19 +82,11 @@ namespace Library.ConsoleApp
 
         static void Main()
         {
-            var context = new LibraryContext();
-            var booksBorrows = context.BookBorrows
-                .Include(x => x.Book)
-                .Include(x => x.User)
-                    .Select(y => new 
-                    {
-                        BooksBorrow = y.Id,
-                        Book = y.Book,
-                        User = y.User
-                    })
-                    .ToList();
-
-            var json = JsonConvert.SerializeObject(booksBorrows);                        
+            var userBorrows = _context.BookBorrows
+                .Include(y => y.Book)
+                .ThenInclude(y => y.BookCategory)
+                .Where(x => x.User.Id == 1)
+                .ToList();
         }
 
         static void BorrowBook()

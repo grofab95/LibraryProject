@@ -1,4 +1,5 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Api.BooksDto;
+using Library.Api.UsersDto;
 using System;
 
 namespace Library.Api.BookBorrowsDto
@@ -6,11 +7,11 @@ namespace Library.Api.BookBorrowsDto
     public class BookBorrowDto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
-        public int BookId { get; set; }
-        public virtual Book Book { get; set; }
-        public DateTime BorrowDate { get; set; }
+        public virtual UserDto User { get; set; }
+        public virtual BookDto Book { get; set; }
+        public DateTime RentDate { get; set; }
+        public DateTime ReturnDate { get; set; }
         public bool IsBookReturned { get; set; }
+        public int BorrowCreatorId { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace Library.MsSqlPersistance.Dao
                 throw new BookTitleAlreadyTaken(book.Title);
             }
 
+            book.BookCategory = new BookCategory(book.BookCategory.Name);
             _context.Books.Add(book);
             _context.SaveChanges();
             return book;
@@ -41,8 +42,7 @@ namespace Library.MsSqlPersistance.Dao
         public IEnumerable<Book> GetAll()
         {
             return _context.Books
-                .Include(x => x.BookCategory)
-                .Include(x => x.BookBorrows);
+                .Include(x => x.BookCategory);
         }
 
         public Book GetById(int id)

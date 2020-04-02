@@ -16,7 +16,6 @@ namespace Library.Api.BooksDto
         public string Description { get; set; }
 
         [Required]
-        public int BookCategoryId { get; set; }
         public virtual BookCategory BookCategory { get; set; }
 
         public string ImageId { get; set; }

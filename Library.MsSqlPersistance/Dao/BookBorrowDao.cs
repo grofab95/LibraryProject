@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Library.MsSqlPersistance.Dao
 {
@@ -18,19 +17,17 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public BookBorrow Create(BookBorrow bookBorrow)
+        public int Create(BookBorrow bookBorrow, int userId, int bookId)
         {
-            if (_context.BookBorrows.Any(bookBorrowDb => bookBorrow.UserId == bookBorrow.UserId) &&
-                _context.BookBorrows.Any(bookBorrowDb => bookBorrow.BookId == bookBorrow.BookId))
-            {
-                throw new BookBorredAlreadyTaken(bookBorrow.UserId, bookBorrow.BookId);
-            }
-
+            bookBorrow.User = _context.Users.FirstOrDefault(x => x.Id == userId)
+                ?? throw new Exception("User not exist");
+            bookBorrow.Book = _context.Books.FirstOrDefault(x => x.Id == bookId)
+                ?? throw new Exception("Book not exist");
             bookBorrow.RentDate = DateTime.Now;
             bookBorrow.IsBookReturned = false;
             _context.BookBorrows.Add(bookBorrow);
             _context.SaveChanges();
-            return bookBorrow;
+            return bookBorrow.Id;
         }
 
         public void Delete(int id)
@@ -43,11 +40,21 @@ namespace Library.MsSqlPersistance.Dao
             }
         }
 
+        public IEnumerable<BookBorrow> GetByUserEmail(string email)
+        {
+            return _context.BookBorrows
+                .Include(x => x.User)
+                .Include(x => x.Book)
+                    .ThenInclude(x => x.BookCategory)
+                .Where(y => y.User.Email == email);
+                
+        }
+
         public IEnumerable<BookBorrow> GetAll()
         {
-            return _context.BookBorrows;
-                //.Include(x => x.User)
-                //.Include(x => x.Book);
+            return _context.BookBorrows
+                .Include(x => x.User)
+                .Include(x => x.Book);
         }
 
         public BookBorrow GetById(int id)

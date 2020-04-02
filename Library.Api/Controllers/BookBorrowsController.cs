@@ -31,8 +31,11 @@ namespace Library.Api.Controllers
         {
             try
             {
-                _bookBorrow.Create(_mapper.Map<BookBorrow>(bookBorrowCreateDto));
-                return Ok();
+                var userId = bookBorrowCreateDto.UserId;
+                var bookId = bookBorrowCreateDto.BookId;
+
+                var id = _bookBorrow.Create(_mapper.Map<BookBorrow>(bookBorrowCreateDto), userId, bookId);
+                return Ok(id);
             }
             catch (LibraryException exception)
             {
@@ -40,21 +43,20 @@ namespace Library.Api.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(new { message = exception.InnerException.Message });
+                return BadRequest(new { message = exception.Message });
             }
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_bookBorrow.GetAll());
-            //return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetAll()));
+            return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetAll()));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("{email}")]
+        public IActionResult GetAllUserBorrows(string email)
         {
-            return Ok(_mapper.Map<BookBorrowDto>(_bookBorrow.GetById(id)));
+            return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetByUserEmail(email)));
         }
 
         [HttpPut("{id}")]

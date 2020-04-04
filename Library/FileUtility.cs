@@ -4,14 +4,14 @@ namespace Library
 {
     public class FileUtility
     {
-        public static void SaveFile(string fileName)
+        public static void SaveToFile(string path, string fileName)
         {
-            File.WriteAllText(Variable.FILENAMEPATH, fileName);
+            File.WriteAllText(path, fileName);
         }
 
-        public static string ReadFile()
+        public static string ReadFile(string path)
         {
-            return File.ReadAllText(Variable.FILENAMEPATH);
+            return File.ReadAllText(path);
         }
     }
 }

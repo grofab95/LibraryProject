@@ -57,26 +57,19 @@ namespace Library.MsSqlPersistance.Dao
 
             if (bookDB == null)
             {
-                throw new LibraryException("Book not found");
+                throw new LibraryException("Książka nie istnieje");
             }
 
             if (!string.IsNullOrWhiteSpace(book.Title) && book.Title != bookDB.Title)
             {
                 if (_context.Books.Any(x => x.Title == book.Title))
                 {
-                    throw new LibraryException($"Book title: {book.Title} is already taken");
+                    throw new LibraryException($"Książka: {book.Title} już istnieje");
                 }
                 bookDB.Title = book.Title;
             }
 
-            if (!string.IsNullOrWhiteSpace(book.Author) && book.Author != bookDB.Author)
-            {
-                if (_context.Books.Any(x => x.Author == book.Author))
-                {
-                    throw new LibraryException($"Book author: {book.Author} is already taken");
-                }
-                bookDB.Author = book.Author;
-            }
+            bookDB.Author = book.Author;
             _context.Books.Update(bookDB);
             _context.SaveChanges();
         }

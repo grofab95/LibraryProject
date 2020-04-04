@@ -21,7 +21,6 @@ namespace Library.Api.UsersDto
         [Required]
         public string Password { get; set; }
 
-        //public AccountTypeEnum AccountTypeId { get; set; }
         public virtual AccountType AccountType { get; set; }
     }
 }

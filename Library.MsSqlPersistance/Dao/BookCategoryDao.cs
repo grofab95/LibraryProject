@@ -19,7 +19,7 @@ namespace Library.MsSqlPersistance.Dao
         {
             if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
             {
-                throw new LibraryException($"Category name: {bookCategory.Name} is already taken");
+                throw new LibraryException($"Kategoria: {bookCategory.Name} już istnieje");
             }
 
             _context.BookCategories.Add(bookCategory);
@@ -54,12 +54,12 @@ namespace Library.MsSqlPersistance.Dao
 
             if (category == null)
             {
-                throw new LibraryException("Book category not found");
+                throw new LibraryException("Kategoria nie odnaleziona");
             }
 
             if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
             {
-                throw new LibraryException($"Book category name: {bookCategory.Name} is already taken");
+                throw new LibraryException($"Kategoria: {bookCategory.Name} już istnieje");
             }
 
             _context.BookCategories.Update(category);

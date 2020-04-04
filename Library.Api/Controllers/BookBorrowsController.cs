@@ -27,7 +27,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult New([FromBody]BookBorrowCreateDto bookBorrowCreateDto)
+        public IActionResult Borrow([FromBody]BookBorrowCreateDto bookBorrowCreateDto)
         {
             try
             {

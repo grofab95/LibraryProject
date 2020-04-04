@@ -10,8 +10,6 @@ namespace Library.Configs
 
         public static Config Get()
         {
-            //var configPath = Path.GetFullPath(@"..\Library.Configs\config.json");
-
             //var configPath = "D:\\Code\\LibraryProject\\Library.Configs\\config.json";
             var configPath = "D:\\Code\\LibraryProject\\config.json";
 

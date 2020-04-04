@@ -20,10 +20,10 @@ namespace Library.MsSqlPersistance.Dao
         public int Create(BookBorrow bookBorrow, int userId, int bookId)
         {
             bookBorrow.User = _context.Users.FirstOrDefault(x => x.Id == userId)
-                ?? throw new Exception("User not exist");
+                ?? throw new Exception($"Użytkownik id: {userId} nie istnieje");
             bookBorrow.Book = _context.Books.FirstOrDefault(x => x.Id == bookId)
-                ?? throw new Exception("Book not exist");
-            bookBorrow.RentDate = DateTime.Now;
+                ?? throw new Exception($"Książka id: {bookId} nie istnieje");
+            bookBorrow.Book.Amount--;
             bookBorrow.IsBookReturned = false;
             _context.BookBorrows.Add(bookBorrow);
             _context.SaveChanges();
@@ -67,7 +67,7 @@ namespace Library.MsSqlPersistance.Dao
             var bookBorrowDb = _context.BookBorrows.Find(bookBorrow.Id);
             if (bookBorrowDb == null)
             {
-                throw new LibraryException($"Book bored with id: {bookBorrow.Id} is not exist.");
+                throw new LibraryException($"Brak wypożyczenia o id: {bookBorrow.Id}");
             }
             bookBorrowDb.IsBookReturned = bookBorrow.IsBookReturned;
             _context.BookBorrows.Update(bookBorrowDb);

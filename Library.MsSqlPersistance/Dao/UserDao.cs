@@ -85,7 +85,7 @@ namespace Library.MsSqlPersistance.Dao
 
             if (user == null)
             {
-                throw new LibraryException("User not found");
+                throw new LibraryException("Użytkownik nie odnaleziony");
             }
             if (!string.IsNullOrWhiteSpace(userParam.Email) && userParam.Email != user.Email)
             {

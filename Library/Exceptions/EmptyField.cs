@@ -3,7 +3,7 @@
     public class EmptyField : LibraryException
     {
         public EmptyField(string fieldName) : base 
-            ($"The {fieldName} is required")
+            ($"Pole {fieldName} jest wymagane")
         { }
     }
 }

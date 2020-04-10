@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Library.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Library.Domain.Adapters;
+using System.Linq;
 
 namespace Library.Api.Controllers
 {
@@ -34,7 +35,7 @@ namespace Library.Api.Controllers
                 var userId = bookBorrowCreateDto.UserId;
                 var bookId = bookBorrowCreateDto.BookId;
 
-                var id = _bookBorrow.Create(_mapper.Map<BookBorrow>(bookBorrowCreateDto), userId, bookId);
+                var id = _bookBorrow.CreateBorrow(_mapper.Map<BookBorrow>(bookBorrowCreateDto));
                 return Ok(id);
             }
             catch (LibraryException exception)
@@ -53,17 +54,17 @@ namespace Library.Api.Controllers
             return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetAll()));
         }
 
-        [HttpGet("{email}")]
-        public IActionResult GetAllUserBorrows(string email)
+        [HttpGet("{userId}")]
+        public IActionResult GetAllUserBorrows(int userId)
         {
-            return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetByUserEmail(email)));
+            return Ok(_mapper.Map<IList<BookBorrowDto>>(_bookBorrow.GetByUserId(userId)));
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]BookBorrowUpdateDto bookBorrowUpdateDto)
         {
             var bookBorrow = _mapper.Map<BookBorrow>(bookBorrowUpdateDto);
-            bookBorrow.Id = id;
+            bookBorrow.BookBorrowId = id;
             try
             {
                 _bookBorrow.Update(bookBorrow);

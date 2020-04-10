@@ -14,11 +14,6 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public AccountType Get(int id)
-        {
-            return _context.AccountTypes.FirstOrDefault(x => x.Id == id);
-        }
-
         public IEnumerable<AccountType> GetAll()
         {
             return _context.AccountTypes;

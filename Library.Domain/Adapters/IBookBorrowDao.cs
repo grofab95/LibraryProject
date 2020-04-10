@@ -6,10 +6,11 @@ namespace Library.Domain.Adapters
     public interface IBookBorrowDao
     {
         IEnumerable<BookBorrow> GetAll();
-        IEnumerable<BookBorrow> GetByUserEmail(string email);
-        BookBorrow GetById(int id);
-        int Create(BookBorrow bookBorrow, int userId, int bookId);
-        void Update(BookBorrow book);
+        IEnumerable<BookBorrow> GetByUserId(int id);
+        BookBorrow GetByBorrowId(int id);
+        int CreateBorrow(BookBorrow borrow);
+        void ReturnBook(int borrowId);
+        void Update(BookBorrow borrow);
         void Delete(int id);
     }
 }

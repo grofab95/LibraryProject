@@ -45,17 +45,11 @@ namespace Library.Api.Controllers
             return Ok(_mapper.Map<IList<BookCategoryDto>>(_bookCategoryDao.GetAll()));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            return Ok(_mapper.Map<BookCategoryDto>(_bookCategoryDao.GetById(id)));
-        }
-        
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]BookCategoryUpdateDto bookCategoryUpdateDto)
         {
             var category = _mapper.Map<BookCategory>(bookCategoryUpdateDto);
-            category.Id = id;        
+            category.BookCategoryId = id;        
             try
             { 
                 _bookCategoryDao.Update(category);

@@ -2,7 +2,7 @@
 {
     public class BookCategoryDto
     {
-        public int Id { get; set; }
+        public int BookCategoryId { get; set; }
         public string Name { get; set; }
     }
 }

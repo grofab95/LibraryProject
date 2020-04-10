@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.MsSqlPersistance.Configurations
 {
-    public class BookCategoryConfiguration : IEntityTypeConfiguration<BookCategory>
+    public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {
-        public void Configure(EntityTypeBuilder<BookCategory> builder)
+        public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.ToTable("BookCategories");
-            builder.HasKey(x => x.BookCategoryId);
+            builder.ToTable("RefreshTokens");
+            builder.HasKey(x => x.RefreshTokenId);
 
             builder.Property(x => x.CreatedDate)
                 .HasDefaultValueSql("getdate()");

@@ -9,6 +9,5 @@ namespace Library.Domain.Adapters
         Book GetById(int id);
         Book Create(Book book);
         void Update(Book book);
-        void Delete(int id);
     }
 }

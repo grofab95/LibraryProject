@@ -1,6 +1,7 @@
 ﻿using Library.Domain.Adapters;
 using Library.Domain.Entities;
 using Library.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,27 +16,31 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public BookCategory Create(BookCategory bookCategory)
+        public int Create(BookCategory bookCategory)
         {
-            if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
+            if (string.IsNullOrWhiteSpace(bookCategory.Name))
             {
-                throw new LibraryException($"Kategoria: {bookCategory.Name} już istnieje");
+                throw new EmptyField("category name");
+            }
+
+            if (_context.BookCategories.Any(x => x.BookCategoryId == bookCategory.BookCategoryId))
+            {
+                throw new BookCategoryExist(bookCategory.Name);
             }
 
             _context.BookCategories.Add(bookCategory);
             _context.SaveChanges();
-
-            return bookCategory;
+            return bookCategory.BookCategoryId;
         }
 
         public void Delete(int id)
         {
-            var bookCategory = _context.BookCategories.Find(id);
-            if (bookCategory != null)
-            {
-                _context.Remove(bookCategory);
-                _context.SaveChanges();
-            }
+            var category = _context.BookCategories
+                .FirstOrDefault(x => x.BookCategoryId == id)
+                    ?? throw new BookCategoryNotExist(id);
+
+            _context.BookCategories.Remove(category);
+            _context.SaveChanges();
         }
 
         public IEnumerable<BookCategory> GetAll()
@@ -43,27 +48,9 @@ namespace Library.MsSqlPersistance.Dao
             return _context.BookCategories;
         }
 
-        public BookCategory GetById(int id)
-        {
-            return _context.BookCategories.Find(id);
-        }
-
         public void Update(BookCategory bookCategory)
         {
-            var category = _context.BookCategories.Find(bookCategory.Id);
-
-            if (category == null)
-            {
-                throw new LibraryException("Kategoria nie odnaleziona");
-            }
-
-            if (_context.BookCategories.Any(x => x.Name == bookCategory.Name))
-            {
-                throw new LibraryException($"Kategoria: {bookCategory.Name} już istnieje");
-            }
-
-            _context.BookCategories.Update(category);
-            _context.SaveChanges();
+            throw new NotImplementedException();
         }
     }
 }

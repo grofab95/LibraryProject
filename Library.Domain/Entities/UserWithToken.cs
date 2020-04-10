@@ -8,9 +8,9 @@
         public UserWithToken(User user)
         {
             this.Email = user.Email;
-            this.Id = user.Id;
-            this.FirstName = user.FirstName;
-            this.LastName = user.LastName;
+            this.UserId = user.UserId;
+            this.Name = user.Name;
+            this.Surname = user.Surname;
             this.AccountType = user.AccountType;
         }
     }

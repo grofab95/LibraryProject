@@ -8,10 +8,10 @@ namespace Library.Api.UsersDto
     public class UserCreateDto
     {
         [Required]
-        public string FirstName { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string Surname { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]

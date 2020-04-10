@@ -17,61 +17,92 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public int Create(BookBorrow bookBorrow, int userId, int bookId)
+        public int CreateBorrow(BookBorrow borrow)
         {
-            bookBorrow.User = _context.Users.FirstOrDefault(x => x.Id == userId)
-                ?? throw new Exception($"Użytkownik id: {userId} nie istnieje");
-            bookBorrow.Book = _context.Books.FirstOrDefault(x => x.Id == bookId)
-                ?? throw new Exception($"Książka id: {bookId} nie istnieje");
-            bookBorrow.Book.Amount--;
-            bookBorrow.IsBookReturned = false;
-            _context.BookBorrows.Add(bookBorrow);
+            var user = _context.Users.FirstOrDefault(x => x.UserId == borrow.UserId)
+                ?? throw new UserNotExist(borrow.UserId);
+
+            var book = _context.Books.FirstOrDefault(x => x.BookId == borrow.BookId)
+                ?? throw new BookNotExist(borrow.BookId);
+
+            var isBookAvailable = book.Amount > 0;
+
+            if (isBookAvailable == false)
+            {
+                throw new BookNotAvailable(book.Title);
+            }
+
+            var isBorrowExit = _context.BookBorrows
+                .Any(x => x.UserId == borrow.UserId && x.BookId == borrow.BookId);
+
+            if (isBorrowExit)
+            {
+                throw new BookBorredAlreadyTaken(borrow.UserId, borrow.BookId);
+            }
+
+            book.Amount--;
+
+            _context.BookBorrows.Add(borrow);
             _context.SaveChanges();
-            return bookBorrow.Id;
+            return borrow.BookBorrowId;
+        }
+
+        public void ReturnBook(int borrowId)
+        {
+            var borrow = GetByBorrowId(borrowId);
+            borrow.IsBookReturned = true;
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            var bookBorrowDb = _context.Books.Find(id);
-            if (bookBorrowDb != null)
-            {
-                _context.Remove(bookBorrowDb);
-                _context.SaveChanges();
-            }
-        }
-
-        public IEnumerable<BookBorrow> GetByUserEmail(string email)
-        {
-            return _context.BookBorrows
-                .Include(x => x.User)
-                .Include(x => x.Book)
-                    .ThenInclude(x => x.BookCategory)
-                .Where(y => y.User.Email == email);
-                
+            throw new NotImplementedException();
         }
 
         public IEnumerable<BookBorrow> GetAll()
         {
             return _context.BookBorrows
-                .Include(x => x.User)
-                .Include(x => x.Book);
+                .Select(x => new BookBorrow
+                {
+                    BookBorrowId = x.BookBorrowId,
+                    Book = x.Book,
+                    User = x.User
+                });
         }
 
-        public BookBorrow GetById(int id)
+        public BookBorrow GetByBorrowId(int id)
         {
-            return _context.BookBorrows.Find(id);
+            return _context.BookBorrows
+                .Include(z => z.Book.BookCategory)
+                .Include(z => z.Book.BookAuthor)
+                .Select(x => new BookBorrow
+                {
+                    BookBorrowId = x.BookBorrowId,
+                    Book = x.Book,
+                    User = x.User,
+                    UserId = x.UserId
+                })
+                .FirstOrDefault(y => y.BookBorrowId == id);
         }
 
-        public void Update(BookBorrow bookBorrow)
+        public IEnumerable<BookBorrow> GetByUserId(int id)
         {
-            var bookBorrowDb = _context.BookBorrows.Find(bookBorrow.Id);
-            if (bookBorrowDb == null)
-            {
-                throw new LibraryException($"Brak wypożyczenia o id: {bookBorrow.Id}");
-            }
-            bookBorrowDb.IsBookReturned = bookBorrow.IsBookReturned;
-            _context.BookBorrows.Update(bookBorrowDb);
-            _context.SaveChanges();
+            return _context.BookBorrows
+                .Include(z => z.Book.BookCategory)
+                .Include(z => z.Book.BookAuthor)
+                .Select(x => new BookBorrow
+                {
+                    BookBorrowId = x.BookBorrowId,
+                    Book = x.Book,
+                    User = x.User,
+                    UserId = x.UserId
+                })
+                .Where(y => y.UserId == id);
+        }
+
+        public void Update(BookBorrow borrow)
+        {
+            throw new NotImplementedException();
         }
     }
 }

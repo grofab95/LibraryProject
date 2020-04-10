@@ -1,7 +1,6 @@
 ﻿using Library.Domain.Entities;
 using Library.Domain.Enums;
 using Library.MsSqlPersistance;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,30 +9,15 @@ using System.Linq;
 
 namespace Library.ConsoleApp
 {
+    class Pass
+    {
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
+    }
+
     class Program
     {
         static LibraryContext _context = new LibraryContext();
-
-        static void AddBookCategories()
-        {
-            var existing = _context.BookCategories.ToList();
-            var data = new List<BookCategory>();
-
-            foreach (var bookCategoryName in Enum.GetValues(typeof(BookCategoryName)))
-            {
-                var bookCategory = new BookCategory((BookCategoryName)bookCategoryName);
-                var isExist = existing.Any(x => x.Name == bookCategory.Name);
-
-                if (!isExist)
-                {
-                    data.Add(bookCategory);
-                }
-            }
-
-
-            _context.BookCategories.AddRange(data);
-            _context.SaveChanges();
-        }
 
         static void AddAccountsTypes()
         {
@@ -55,55 +39,187 @@ namespace Library.ConsoleApp
             _context.SaveChanges();
         }
 
-        static void AddBooksFromJson()
+        static void AddFactors()
         {
-            var file = File.ReadAllText("data/library-books.txt");
-            var books = JsonUtility.ParseToObject<List<Book>>(file);
+
+            var bookCategories = new List<BookCategory>()
+            {
+                new BookCategory { Name = "Fantastyka" },
+                new BookCategory { Name = "Hobby" },
+                new BookCategory { Name = "Zdrowie" },
+                new BookCategory { Name = "Astronomia" },
+                new BookCategory { Name = "Humor" },
+                new BookCategory { Name = "Informatyka" },
+                new BookCategory { Name = "Kultura" },
+                new BookCategory { Name = "Historia" }
+            };
+
+            var authors = new List<BookAuthor>()
+            {
+                new BookAuthor { Name = "J. K.", Surname = "Rowling" },
+                new BookAuthor { Name = "Marco", Surname = "Bersanelli" },
+                new BookAuthor { Name = "Thomas", Surname = "Dormandy" },
+                new BookAuthor { Name = "Szymon", Surname = "Wrzesiński" },
+                new BookAuthor { Name = "Mariusz", Surname = "Kolmasiak" },
+                new BookAuthor { Name = "Dimitris", Surname = "Chassapakis" },
+                new BookAuthor { Name = "Dabit", Surname = "Nader" },
+                new BookAuthor { Name = "Robert C.", Surname = "Martin" },
+            };
+
+
+            _context.BookCategories.AddRange(bookCategories);
+            _context.BookAuthors.AddRange(authors);
+
+            _context.SaveChanges();
+        }
+
+        static void AddBooksFromJSon()
+        {
+            var json = File.ReadAllText("data/library-books.txt");
+            var books = JsonConvert.DeserializeObject<List<Book>>(json);
 
             _context.Books.AddRange(books);
             _context.SaveChanges();
         }
 
-        static void UpdateBooksCategories()
+        static Pass GetHashed(string password)
         {
-            var books = _context.Books.ToList();
-            var booksCategories = _context.BookCategories.ToList();
+            byte[] passwordHash, passwordSalt;
+            PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            books[0].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Astronomia);
-            books[1].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Fantastyka);
-            books[2].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Zdrowie);
-            books[3].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Historia);
-            books[4].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Humor);
-            books[5].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Astronomia);
-            books[6].BookCategory = booksCategories.First(x => x.Name == BookCategoryName.Informatyka);
+            return new Pass
+            {
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+        }
 
+        static void AddUsers()
+        {
+            var users = new List<User>();
+
+            var user = new User();
+
+            users.Add(new User
+            {
+                Name = "Fabian",
+                Surname = "Grochla",
+                Email = "qw@qw",
+                AccountTypeId = 1
+            });
+
+            users.Add(new User
+            {
+                Name = "Marian",
+                Surname = "Prosty",
+                Email = "prosty@krzywy",
+                AccountTypeId = 3
+            });
+
+            users.Add(new User
+            {
+                Name = "Kasia",
+                Surname = "Nowak",
+                Email = "nowak@test",
+                AccountTypeId = 2
+            });
+
+            users.Add(new User
+            {
+                Name = "Andrzej",
+                Surname = "Kowalski",
+                Email = "kowalski@domain",
+                AccountTypeId = 3
+            });
+
+           
+
+            _context.Users.AddRange(users);
             _context.SaveChanges();
+        }
+
+        static void AddBorrows()
+        {
+            var borrows = new List<BookBorrow>
+            {
+                new BookBorrow
+                {
+                    UserId = 1,
+                    BookId = 2,
+                    RentDate = DateTime.Now
+                },
+                new BookBorrow
+                {
+                    UserId = 2,
+                    BookId = 5,
+                    RentDate = DateTime.Now
+                },
+                new BookBorrow
+                {
+                    UserId = 2,
+                    BookId = 3,
+                    RentDate = DateTime.Now
+                },
+                new BookBorrow
+                {
+                    UserId = 3,
+                    BookId = 5,
+                    RentDate = DateTime.Now
+                },
+                new BookBorrow
+                {
+                    UserId = 3,
+                    BookId = 6,
+                    RentDate = DateTime.Now
+                },
+                new BookBorrow
+                {
+                    UserId = 2,
+                    BookId = 3,
+                    RentDate = DateTime.Now
+                },
+            };
+
+            _context.BookBorrows.AddRange(borrows);
+            _context.SaveChanges();
+        }
+
+        static void AddObjects()
+        {
+            //AddAccountsTypes();
+            //AddFactors();
+            //AddBooksFromJSon();
+            //AddUsers();
+            AddBorrows();
         }
 
         static void Main()
         {
-            var userBorrows = _context.BookBorrows
-                .Include(y => y.Book)
-                .ThenInclude(y => y.BookCategory)
-                .Where(x => x.User.Id == 1)
+
+            AddObjects();
+
+
+            var users = _context.Users
+                .Select(x => new
+                {
+                    UserID = x.UserId,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    Email = x.Email,
+                    Role = x.AccountType.Name,
+                    Borrow = x.BookBorrows
+                        .Where(y => y.UserId == x.UserId)
+                        .Select(z => new
+                        {
+                            Title = z.Book.Title,
+                            Author = $"{z.Book.BookAuthor.Name} {z.Book.BookAuthor.Surname}",
+                            Description = z.Book.Description,
+                            Category = z.Book.BookCategory.Name
+                        })
+                        .ToList()
+
+                })
                 .ToList();
-        }
-
-        static void BorrowBook()
-        {
-            var user = _context.Users.First(x => x.Email == "qw@qw");
-            var books = _context.Books.ToList();
-
-            var borrow = new BookBorrow
-            {
-                Book = books.First(x => x.Title == "React Native w akcji"),
-                User = user,
-                RentDate = DateTime.Now,
-                BorrowCreatorId = 0
-            };
-
-            _context.BookBorrows.Add(borrow);
-            _context.SaveChanges();            
         }
     }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 namespace Library.Domain.Entities
 {
-    public class BookCategory
+    public class BookAuthor
     {
-        public int BookCategoryId { get; set; }
+        public int BookAuthorId { get; set; }
         public string Name { get; set; }
+        public string Surname { get; set; }
         public virtual ICollection<Book> Books { get; set; }
         public DateTime CreatedDate { get; set; }
     }

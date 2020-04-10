@@ -6,6 +6,5 @@ namespace Library.Domain.Adapters
     public interface IAccountTypeDao
     {
         IEnumerable<AccountType> GetAll();
-        AccountType Get(int id);
     }
 }

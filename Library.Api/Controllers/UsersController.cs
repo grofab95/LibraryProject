@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Options;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Library.Exceptions;
+﻿using AutoMapper;
 using Library.Api.UsersDto;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using Library.Domain.Entities;
-using Library.MsSqlPersistance;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Library.Configs;
 using Library.Domain.Adapters;
+using Library.Domain.Entities;
+using Library.Exceptions;
+using Library.MsSqlPersistance;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
@@ -56,7 +55,7 @@ namespace Library.Api.Controllers
 
                 var userWithToken = new UserWithToken(user);
                 userWithToken.RefreshToken = refreshToken.Token;
-                userWithToken.AccessToken = GenerateAccessToken(user.Id);
+                userWithToken.AccessToken = GenerateAccessToken(user.UserId);
                 userWithToken.AccountType.Users = null;
                 return Ok(userWithToken);
             }
@@ -72,7 +71,7 @@ namespace Library.Api.Controllers
         {
             try
             {
-                _userDao.Create(_mapper.Map<User>(userCreateDto), userCreateDto.Password);
+                _userDao.Register(_mapper.Map<User>(userCreateDto), userCreateDto.Password);
                 return Ok();
             }
             catch (LibraryException exception)
@@ -84,6 +83,7 @@ namespace Library.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            //return Ok(_mapper.Map<IList<UserDto>>(_userDao.GetAll()));
             return Ok(_mapper.Map<IList<UserDto>>(_userDao.GetAll()));
         }
 
@@ -97,7 +97,7 @@ namespace Library.Api.Controllers
         public IActionResult Update(int id, [FromBody]UserUpdateDto userUpdateDto)
         {
             var user = _mapper.Map<User>(userUpdateDto);
-            user.Id = id;
+            user.UserId = id;
             try
             {
                 _userDao.Update(user, userUpdateDto.Password);
@@ -117,16 +117,15 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost("token/refresh")]
-        public async Task<ActionResult<UserWithToken>> RefreshToken([FromBody] RefreshRequest refreshRequest)
+        public async Task<ActionResult<User>> RefreshToken([FromBody] RefreshRequest refreshRequest)
         {
             User user = await GetUserFromAccessToken(refreshRequest.AccessToken);
 
             if (user != null && ValidateRefreshToken(user, refreshRequest.RefreshToken))
             {
                 UserWithToken userWithToken = new UserWithToken(user);
-                userWithToken.AccessToken = GenerateAccessToken(user.Id);
-
-                return userWithToken;
+                userWithToken.AccessToken = GenerateAccessToken(user.UserId);
+                return user;
             }
 
             return null;
@@ -148,12 +147,11 @@ namespace Library.Api.Controllers
 
         private bool ValidateRefreshToken(User user, string refreshToken)
         {
-
             RefreshToken refreshTokenUser = _dataContext.RefreshTokens.Where(rt => rt.Token == refreshToken)
                                                 .OrderByDescending(rt => rt.ExpiryDate)
                                                 .FirstOrDefault();
 
-            if (refreshTokenUser != null && refreshTokenUser.UserId == user.Id
+            if (refreshTokenUser != null && refreshTokenUser.UserId == user.UserId
                 && refreshTokenUser.ExpiryDate > DateTime.UtcNow)
             {
                 return true;
@@ -180,13 +178,13 @@ namespace Library.Api.Controllers
                 SecurityToken securityToken;
                 var principle = tokenHandler.ValidateToken(accessToken, tokenValidationParameters, out securityToken);
 
-                JwtSecurityToken jwtSecurityToken = securityToken as JwtSecurityToken;
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
 
                 if (jwtSecurityToken != null && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var userId = principle.FindFirst(ClaimTypes.Name)?.Value;
 
-                    return await _dataContext.Users.Where(u => u.Id == Convert.ToInt32(userId)).FirstOrDefaultAsync();
+                    return await _dataContext.Users.Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
                 }
             }
             catch (Exception)
@@ -199,7 +197,7 @@ namespace Library.Api.Controllers
 
         private RefreshToken GenerateRefreshToken()
         {
-            RefreshToken refreshToken = new RefreshToken();
+            var refreshToken = new RefreshToken();
 
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())

@@ -21,39 +21,46 @@ namespace Library.MsSqlPersistance.Migrations
 
             modelBuilder.Entity("Library.Domain.Entities.AccountType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AccountTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AccountTypeId");
 
                     b.ToTable("AccountTypes");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BookCategoryId")
+                    b.Property<int>("BookAuthorId")
                         .HasColumnType("int");
+
+                    b.Property<int>("BookCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
@@ -67,16 +74,41 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BookId");
+
+                    b.HasIndex("BookAuthorId");
 
                     b.HasIndex("BookCategoryId");
 
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Library.Domain.Entities.BookAuthor", b =>
+                {
+                    b.Property<int>("BookAuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BookAuthorId");
+
+                    b.ToTable("BookAuthors");
+                });
+
             modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BookBorrowId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -84,8 +116,10 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BorrowCreatorId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<bool>("IsBookReturned")
                         .HasColumnType("bit");
@@ -99,7 +133,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("BookBorrowId");
 
                     b.HasIndex("BookId");
 
@@ -110,27 +144,35 @@ namespace Library.MsSqlPersistance.Migrations
 
             modelBuilder.Entity("Library.Domain.Entities.BookCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BookCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BookCategoryId");
 
                     b.ToTable("BookCategories");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RefreshTokenId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -144,7 +186,7 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("RefreshTokenId");
 
                     b.HasIndex("UserId");
 
@@ -153,21 +195,23 @@ namespace Library.MsSqlPersistance.Migrations
 
             modelBuilder.Entity("Library.Domain.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountTypeId")
+                    b.Property<int>("AccountTypeId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
@@ -176,7 +220,10 @@ namespace Library.MsSqlPersistance.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
 
                     b.HasIndex("AccountTypeId");
 
@@ -185,9 +232,15 @@ namespace Library.MsSqlPersistance.Migrations
 
             modelBuilder.Entity("Library.Domain.Entities.Book", b =>
                 {
+                    b.HasOne("Library.Domain.Entities.BookAuthor", "BookAuthor")
+                        .WithMany("Books")
+                        .HasForeignKey("BookAuthorId")
+                        .IsRequired();
+
                     b.HasOne("Library.Domain.Entities.BookCategory", "BookCategory")
                         .WithMany("Books")
-                        .HasForeignKey("BookCategoryId");
+                        .HasForeignKey("BookCategoryId")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.BookBorrow", b =>
@@ -216,7 +269,8 @@ namespace Library.MsSqlPersistance.Migrations
                 {
                     b.HasOne("Library.Domain.Entities.AccountType", "AccountType")
                         .WithMany("Users")
-                        .HasForeignKey("AccountTypeId");
+                        .HasForeignKey("AccountTypeId")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -55,6 +55,7 @@ namespace Library.Api
 
             services.AddScoped<IUserDao, UserDao>();
             services.AddScoped<IBookCategoryDao, BookCategoryDao>();
+            services.AddScoped<IBookAuthorDao, BookAuthorDao>();
             services.AddScoped<IBookDao, BookDao>();
             services.AddScoped<IBookBorrowDao, BookBorrowDao>();
             services.AddScoped<IAccountTypeDao, AccountTypeDao>();

@@ -11,6 +11,7 @@ using Library.Domain.Adapters;
 
 namespace Library.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
@@ -25,10 +26,9 @@ namespace Library.Api.Controllers
             _bookDao = bookDao;
             _mapper = mapper;
         }
-
-        [Authorize]
+                
         [HttpPost]
-        public IActionResult Register([FromBody]BookRegisterDto bookRegisterDto)
+        public IActionResult Create([FromBody]BookRegisterDto bookRegisterDto)
         {     
             try
             {
@@ -46,26 +46,23 @@ namespace Library.Api.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_mapper.Map<IList<BookDto>>(_bookDao.GetAll()));
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             return Ok(_mapper.Map<BookDto>(_bookDao.GetById(id)));
         }
 
-        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]BookUpdateDto bookUpdateDto)
         {
             var book = _mapper.Map<Book>(bookUpdateDto);
-            book.Id = id;        
+            book.BookId = id;        
             try
             {
                 _bookDao.Update(book);
@@ -77,25 +74,17 @@ namespace Library.Api.Controllers
             }
         }
 
-        [Authorize]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _bookDao.Delete(id);
-            return Ok();
-        }
-
         private int GetBookId(BookRegisterDto bookReg)
         {
             var book = _bookDao.GetAll()
-                .FirstOrDefault(x => x.Title == bookReg.Title && x.Author == bookReg.Author);
+                .FirstOrDefault(x => x.Title == bookReg.Title);
 
             if (book == null)
             {
                 throw new Exception("Błąd podczas pobierania id książki");
             }
 
-            return book.Id;
+            return book.BookId;
         }
     }
 }

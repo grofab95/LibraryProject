@@ -42,10 +42,10 @@ namespace Library.MsSqlPersistance.Dao
 
         public User GetById(int id)
         {
-            return _context.Users.Include(y => y.AccountType).FirstOrDefault(x => x.Id == id);
+            return _context.Users.Include(y => y.AccountType).FirstOrDefault(x => x.UserId == id);
         }
 
-        public User Create(User user, string password)
+        public User Register(User user, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
             {
@@ -55,13 +55,13 @@ namespace Library.MsSqlPersistance.Dao
             {
                 throw new EmailAlreadyTaken(user.Email);
             }
-            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
+            if (!string.IsNullOrWhiteSpace(user.Name) && !string.IsNullOrWhiteSpace(user.Surname))
             {
                 if (_context.Users.Any(x =>
-                    x.FirstName == user.FirstName &&
-                    x.LastName == user.LastName))
+                    x.Name == user.Name &&
+                    x.Surname == user.Surname))
                 {
-                    throw new UserAlreadyTaken(user.FirstName, user.LastName);
+                    throw new UserAlreadyTaken(user.Name, user.Surname);
                 }
             }
             byte[] passwordHash, passwordSalt;
@@ -75,13 +75,12 @@ namespace Library.MsSqlPersistance.Dao
             _context.Users.Add(user);
             _context.SaveChanges();
 
-
             return user;
         }
 
         public void Update(User userParam, string password = null)
         {
-            var user = _context.Users.Find(userParam.Id);
+            var user = _context.Users.Find(userParam.UserId);
 
             if (user == null)
             {
@@ -95,13 +94,13 @@ namespace Library.MsSqlPersistance.Dao
                 }
                 user.Email = userParam.Email;
             }
-            if (!string.IsNullOrWhiteSpace(userParam.FirstName))
+            if (!string.IsNullOrWhiteSpace(userParam.Name))
             {
-                user.FirstName = userParam.FirstName;
+                user.Surname = userParam.Name;
             }
-            if (!string.IsNullOrWhiteSpace(userParam.LastName))
+            if (!string.IsNullOrWhiteSpace(userParam.Surname))
             {
-                user.LastName = userParam.LastName;
+                user.Surname = userParam.Surname;
             }
             if (!string.IsNullOrWhiteSpace(password))
             {

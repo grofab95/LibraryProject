@@ -10,12 +10,12 @@ namespace Library.Configs
 
         public static Config Get()
         {
-            //var configPath = "D:\\Code\\LibraryProject\\Library.Configs\\config.json";
             var configPath = "D:\\Code\\LibraryProject\\config.json";
+            //var configPath = "D:\\APP_DEPLOY_NET\\config.json";
 
             if (!File.Exists(configPath))
             {
-                throw new Exception("Config file not exist!");
+                throw new Exception($"Config file not exist, path: {configPath}");
             }
 
             var config = File.ReadAllText(configPath);

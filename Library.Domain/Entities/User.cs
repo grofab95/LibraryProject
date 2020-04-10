@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Library.Domain.Entities
 {
@@ -9,14 +10,16 @@ namespace Library.Domain.Entities
             RefreshTokens = new HashSet<RefreshToken>();
         }
 
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public int AccountTypeId { get; set; }
         public virtual AccountType AccountType { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<BookBorrow> BookBorrows { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

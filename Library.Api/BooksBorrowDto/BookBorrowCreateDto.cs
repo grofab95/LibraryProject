@@ -12,6 +12,5 @@ namespace Library.Api.BookBorrowsDto
         [Required]
         public DateTime RentDate { get; set; }
         public DateTime ReturnDate { get; set; }
-        public int BorrowCreatorId { get; set; }
     }
 }

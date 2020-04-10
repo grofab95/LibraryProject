@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Api.AccountsTypesDto;
+using Library.Api.BookAuthorsDto;
 using Library.Api.BookBorrowsDto;
 using Library.Api.BookCategoriesDto;
 using Library.Api.BooksDto;
@@ -29,6 +30,9 @@ namespace Library.Api
             CreateMap<BookBorrow, BookBorrowDto>();
             CreateMap<BookBorrowCreateDto, BookBorrow>();
             CreateMap<BookBorrowUpdateDto, BookBorrow>();
+
+            CreateMap<BookAuthor, BookAuthorDto>();
+            CreateMap<BookAuthorRegisterDto, BookAuthor>();
         }
     }
 }

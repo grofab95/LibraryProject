@@ -4,23 +4,22 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.MsSqlPersistance.Configurations
 {
-    public class BookBorrowConfiguration : IEntityTypeConfiguration<BookBorrow>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<BookBorrow> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("BookBorrows");
-            builder.HasKey(x => x.BookBorrowId);
+            builder.ToTable("Users");
+            builder.HasKey(x => x.UserId);
 
             builder.Property(x => x.CreatedDate)
                 .HasDefaultValueSql("getdate()");
 
-            builder.HasOne(x => x.User)
-                .WithMany(x => x.BookBorrows)
-                .IsRequired()
+            builder.HasMany(x => x.BookBorrows)
+                .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.HasOne(x => x.Book)
-                .WithMany(x => x.BookBorrows)
+            builder.HasOne(x => x.AccountType)
+                .WithMany(x => x.Users)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }

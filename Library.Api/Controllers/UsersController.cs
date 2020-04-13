@@ -57,7 +57,8 @@ namespace Library.Api.Controllers
                 userWithToken.RefreshToken = refreshToken.Token;
                 userWithToken.AccessToken = GenerateAccessToken(user.UserId);
                 userWithToken.AccountType.Users = null;
-                return Ok(userWithToken);
+
+                return Ok(_mapper.Map<UserWithTokenDto>(userWithToken));
             }
             catch (Exception ex)
             {
@@ -135,7 +136,9 @@ namespace Library.Api.Controllers
         [HttpPost("token/getUser")]
         public async Task<ActionResult<User>> GetUserByAccessToken([FromBody] string accessToken)
         {
-            User user = await GetUserFromAccessToken(accessToken);
+            var user = await GetUserFromAccessToken(accessToken);
+
+            user.AccountType.Users = null;
 
             if (user != null)
             {
@@ -184,7 +187,9 @@ namespace Library.Api.Controllers
                 {
                     var userId = principle.FindFirst(ClaimTypes.Name)?.Value;
 
-                    return await _dataContext.Users.Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
+                    var xx = await _dataContext.Users.Include(x => x.AccountType).Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
+
+                    return await _dataContext.Users.Include(x => x.AccountType).Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
                 }
             }
             catch (Exception)

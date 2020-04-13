@@ -17,6 +17,8 @@ namespace Library.Api
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
 
+            CreateMap<UserWithToken, UserWithTokenDto>();
+
             CreateMap<AccountType, AccountTypeDto>();
 
             CreateMap<BookCategory, BookCategoryDto>();

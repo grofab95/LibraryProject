@@ -195,8 +195,10 @@ namespace Library.ConsoleApp
 
         static void Main()
         {
+            var test = new LinqTests(_context);
+            test.Start();
 
-            AddObjects();
+            //AddObjects();
 
 
             var users = _context.Users

@@ -94,6 +94,8 @@ namespace Library.MsSqlPersistance.Dao
                 {
                     BookBorrowId = x.BookBorrowId,
                     Book = x.Book,
+                    RentDate = x.RentDate,
+                    ReturnDate = x.ReturnDate,
                     User = x.User,
                     UserId = x.UserId
                 })

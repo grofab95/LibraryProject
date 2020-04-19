@@ -5,7 +5,7 @@ namespace Library.Domain.Adapters
 {
     public interface IBookAuthorDao
     {
-        int Create(BookAuthor author);
+        BookAuthor Create(BookAuthor author);
         void Delete(int id);
         IEnumerable<BookAuthor> GetAll();
         void Update(BookAuthor bookCategory);

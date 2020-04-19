@@ -1,6 +1,4 @@
-﻿using Library.Domain.Enums;
-
-namespace Library.Api.AccountsTypesDto
+﻿namespace Library.Api.AccountsTypesDto
 {
     public class AccountTypeDto
     {

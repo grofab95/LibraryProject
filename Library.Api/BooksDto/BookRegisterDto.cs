@@ -10,7 +10,7 @@ namespace Library.Api.BooksDto
         public string Title { get; set; }
 
         [Required]
-        public string Author { get; set; }
+        public BookAuthor BookAuthor { get; set; }
 
         [Required]
         public string Description { get; set; }

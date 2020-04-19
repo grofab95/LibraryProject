@@ -1,6 +1,4 @@
-﻿using Library.Domain;
-using Library.Domain.Entities;
-using Library.Domain.Enums;
+﻿using Library.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Api.UsersDto

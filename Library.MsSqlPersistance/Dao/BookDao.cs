@@ -37,6 +37,11 @@ namespace Library.MsSqlPersistance.Dao
                 throw new BookTitleAlreadyTaken(book.Title);
             }
 
+            book.BookAuthorId = book.BookAuthor.BookAuthorId;
+            book.BookCategoryId = book.BookCategory.BookCategoryId;
+            book.BookAuthor = null;
+            book.BookCategory = null;
+
             _context.Add(book);
             _context.SaveChanges();
 
@@ -53,7 +58,8 @@ namespace Library.MsSqlPersistance.Dao
                      BookAuthor = x.BookAuthor,
                      BookCategory = x.BookCategory,
                      Amount = x.Amount,
-                     Description = x.Description
+                     Description = x.Description,
+                     ImageId = x.ImageId
                  });
         }
 
@@ -77,7 +83,12 @@ namespace Library.MsSqlPersistance.Dao
             var bookDb = _context.Books.FirstOrDefault(x => x.BookId == book.BookId)
                 ?? throw new BookNotExist(book.Title);
 
-            bookDb = book;
+            bookDb.Title = book.Title;
+            bookDb.BookAuthorId = book.BookAuthor.BookAuthorId;
+            bookDb.BookCategoryId = book.BookCategory.BookCategoryId;
+            bookDb.Description = book.Description;
+            bookDb.ImageId = book.ImageId;
+
             _context.SaveChanges();
         }
     }

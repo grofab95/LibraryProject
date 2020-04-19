@@ -6,7 +6,7 @@ namespace Library.Domain.Adapters
     public interface IBookCategoryDao
     {
         IEnumerable<BookCategory> GetAll();
-        int Create(BookCategory bookCategory);
+        BookCategory Create(BookCategory bookCategory);
         void Update(BookCategory bookCategory);
         void Delete(int id);
     }

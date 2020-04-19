@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Entities;
-using Library.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -15,11 +14,6 @@ namespace Library.MsSqlPersistance.Configurations
 
             builder.Property(x => x.CreatedDate)
                 .HasDefaultValueSql("getdate()");
-
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasConversion(x => x.ToString(), y => (AccountTypeName)Enum.Parse(typeof(AccountTypeName), y))
-                .HasColumnName("Name");
         }
     }
 }

@@ -68,9 +68,7 @@ namespace Library.MsSqlPersistance.Dao
             PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-
-            var accountType = _context.AccountTypes.First(x => x.Name == Domain.Enums.AccountTypeName.Admin);
-            user.AccountType = accountType;
+            user.AccountTypeId = 3;
 
             _context.Users.Add(user);
             _context.SaveChanges();

@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Entities;
-using Library.Domain.Enums;
 using Library.MsSqlPersistance;
 using Newtonsoft.Json;
 using System;
@@ -24,16 +23,16 @@ namespace Library.ConsoleApp
             var existing = _context.AccountTypes.ToList();
             var data = new List<AccountType>();
 
-            foreach (var accountTypeName in Enum.GetValues(typeof(AccountTypeName)))
-            {
-                var accountType = new AccountType((AccountTypeName)accountTypeName);
-                var isExist = existing.Any(x => x.Name == accountType.Name);
+            //foreach (var accountTypeName in Enum.GetValues(typeof(AccountTypeName)))
+            //{
+            //    var accountType = new AccountType((AccountTypeName)accountTypeName);
+            //    var isExist = existing.Any(x => x.Name == accountType.Name);
 
-                if (!isExist)
-                {
-                    data.Add(accountType);
-                }
-            }
+            //    if (!isExist)
+            //    {
+            //        data.Add(accountType);
+            //    }
+            //}
 
             _context.AccountTypes.AddRange(data);
             _context.SaveChanges();

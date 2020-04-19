@@ -186,9 +186,6 @@ namespace Library.Api.Controllers
                 if (jwtSecurityToken != null && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var userId = principle.FindFirst(ClaimTypes.Name)?.Value;
-
-                    var xx = await _dataContext.Users.Include(x => x.AccountType).Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
-
                     return await _dataContext.Users.Include(x => x.AccountType).Where(u => u.UserId == Convert.ToInt32(userId)).FirstOrDefaultAsync();
                 }
             }

@@ -28,8 +28,8 @@ namespace Library.Api.Controllers
         {
             try
             {
-                var id = _authorDao.Create(_mapper.Map<BookAuthor>(authorRegisterDto));
-                return Ok(id);
+                var author = _authorDao.Create(_mapper.Map<BookAuthor>(authorRegisterDto));
+                return Ok(author);
             }
             catch (LibraryException exception)
             {

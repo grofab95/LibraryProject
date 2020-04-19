@@ -16,7 +16,7 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public int Create(BookCategory bookCategory)
+        public BookCategory Create(BookCategory bookCategory)
         {
             if (string.IsNullOrWhiteSpace(bookCategory.Name))
             {
@@ -30,7 +30,7 @@ namespace Library.MsSqlPersistance.Dao
 
             _context.BookCategories.Add(bookCategory);
             _context.SaveChanges();
-            return bookCategory.BookCategoryId;
+            return bookCategory;
         }
 
         public void Delete(int id)

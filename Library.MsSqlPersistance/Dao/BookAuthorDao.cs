@@ -16,7 +16,7 @@ namespace Library.MsSqlPersistance.Dao
             _context = context;
         }
 
-        public int Create(BookAuthor author)
+        public BookAuthor Create(BookAuthor author)
         {
             if (string.IsNullOrWhiteSpace(author.Name))
             {
@@ -36,7 +36,7 @@ namespace Library.MsSqlPersistance.Dao
 
             _context.BookAuthors.Add(author);
             _context.SaveChanges();
-            return author.BookAuthorId;
+            return author;
         }
 
         public void Delete(int id)

@@ -30,8 +30,8 @@ namespace Library.Api.Controllers
         {
             try
             {
-                _bookCategoryDao.Create(_mapper.Map<BookCategory>(bookCategoryRegisterDto));
-                return Ok();
+                var category = _bookCategoryDao.Create(_mapper.Map<BookCategory>(bookCategoryRegisterDto));
+                return Ok(category);
             }
             catch (LibraryException exception)
             {

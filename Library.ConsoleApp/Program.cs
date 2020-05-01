@@ -185,19 +185,18 @@ namespace Library.ConsoleApp
 
         static void AddObjects()
         {
-            //AddAccountsTypes();
-            //AddFactors();
-            //AddBooksFromJSon();
-            //AddUsers();
+            AddAccountsTypes();
+            AddFactors();
+            AddBooksFromJSon();
+            AddUsers();
             AddBorrows();
         }
 
         static void Main()
         {
-            var test = new LinqTests(_context);
-            test.Start();
+            
 
-            //AddObjects();
+            AddObjects();
 
 
             var users = _context.Users

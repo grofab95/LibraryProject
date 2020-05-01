@@ -39,13 +39,24 @@ namespace Library.MsSqlPersistance.Dao
             return author;
         }
 
-        public void Delete(int id)
+        public void Delete(int authorId)
         {
-            var author = _context.BookAuthors
-                .FirstOrDefault(x => x.BookAuthorId == id)
-                    ?? throw new AuthorNotExist(id);
+            var dto = _context.BookAuthors
+                .Where(x => x.BookAuthorId == authorId)
+                .Select(y => new
+                {
+                    Author = y,
+                    AthorBooks = y.Books.ToList()
+                })
+                .FirstOrDefault()
+                    ?? throw new AuthorNotExist(authorId);
 
-            _context.BookAuthors.Remove(author);
+            var hasAuthorBooks = dto.AthorBooks.Count > 0;
+
+            if (hasAuthorBooks)
+                throw new AuthorHasBooks(dto.Author.FullName);
+
+            _context.BookAuthors.Remove(dto.Author);
             _context.SaveChanges();
         }
 
@@ -54,9 +65,24 @@ namespace Library.MsSqlPersistance.Dao
             return _context.BookAuthors;
         }
 
-        public void Update(BookAuthor bookCategory)
+        public void Update(BookAuthor bookAuthor)
         {
-            throw new NotImplementedException();
+            var authorDb = _context.BookAuthors
+                .FirstOrDefault(x => x.BookAuthorId == bookAuthor.BookAuthorId)
+                ?? throw new AuthorNotExist(bookAuthor.BookAuthorId);
+
+            var isAlreadyExist = 
+                _context.BookAuthors.Any(x => x.Name == bookAuthor.Name && x.Surname == bookAuthor.Surname);
+
+            if (isAlreadyExist)
+            {
+                throw new AuthorExist();
+            }
+
+            authorDb.Name = bookAuthor.Name;
+            authorDb.Surname = bookAuthor.Surname;
+
+            _context.SaveChanges();
         }
     }
 }

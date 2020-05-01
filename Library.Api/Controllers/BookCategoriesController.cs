@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Library.Api.BookCategoriesDto;
 using Library.Domain.Entities;
 using Library.Domain.Adapters;
+using System;
 
 namespace Library.Api.Controllers
 {
@@ -45,27 +46,34 @@ namespace Library.Api.Controllers
             return Ok(_mapper.Map<IList<BookCategoryDto>>(_bookCategoryDao.GetAll()));
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]BookCategoryUpdateDto bookCategoryUpdateDto)
-        {
-            var category = _mapper.Map<BookCategory>(bookCategoryUpdateDto);
-            category.BookCategoryId = id;        
+        [HttpPut]
+        public IActionResult Update(BookCategoryUpdateDto bookCategoryUpdateDto)
+        {              
             try
-            { 
+            {
+                var category = _mapper.Map<BookCategory>(bookCategoryUpdateDto);
                 _bookCategoryDao.Update(category);
                 return Ok();
             }
             catch (LibraryException exception)
             {
-                return BadRequest(new { message = exception.Message });
+                return BadRequest(exception.Message);
             }
         }
         
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _bookCategoryDao.Delete(id);
-            return Ok();
+            try
+            {
+                _bookCategoryDao.Delete(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }

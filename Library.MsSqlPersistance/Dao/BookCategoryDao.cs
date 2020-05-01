@@ -35,11 +35,20 @@ namespace Library.MsSqlPersistance.Dao
 
         public void Delete(int id)
         {
-            var category = _context.BookCategories
-                .FirstOrDefault(x => x.BookCategoryId == id)
+            var dto = _context.BookCategories
+                .Where(x => x.BookCategoryId == id)
+                .Select(y => new
+                {
+                    Category = y,
+                    CategoryBooks = y.Books.ToList()
+                })
+                .FirstOrDefault()
                     ?? throw new BookCategoryNotExist(id);
 
-            _context.BookCategories.Remove(category);
+            if (dto.CategoryBooks.Count > 0)
+                throw new CategoryHasBook(dto.Category.Name);           
+
+            _context.BookCategories.Remove(dto.Category);
             _context.SaveChanges();
         }
 
@@ -50,7 +59,21 @@ namespace Library.MsSqlPersistance.Dao
 
         public void Update(BookCategory bookCategory)
         {
-            throw new NotImplementedException();
+            var categoryDb = _context.BookCategories
+                .FirstOrDefault(x => x.BookCategoryId == bookCategory.BookCategoryId)
+                ?? throw new BookCategoryNotExist(bookCategory.BookCategoryId);
+
+            var isAlreadyExist =
+                _context.BookCategories.Any(x => x.Name == bookCategory.Name);
+
+            if (isAlreadyExist)
+            {
+                throw new BookCategoryExist(bookCategory.Name);
+            }
+
+            categoryDb.Name = bookCategory.Name;
+
+            _context.SaveChanges();
         }
     }
 }

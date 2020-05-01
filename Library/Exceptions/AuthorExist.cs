@@ -5,5 +5,9 @@
         public AuthorExist(string name) : base($"Autor: {name} już istnieje.")
         {
         }
+
+        public AuthorExist() : base("Autor już istnieje.")
+        { 
+        }
     }
 }

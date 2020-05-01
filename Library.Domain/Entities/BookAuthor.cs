@@ -10,5 +10,13 @@ namespace Library.Domain.Entities
         public string Surname { get; set; }
         public virtual ICollection<Book> Books { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                return $"{Name} {Surname}";
+            }
+        }
     }
 }

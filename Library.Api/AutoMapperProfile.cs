@@ -35,6 +35,7 @@ namespace Library.Api
 
             CreateMap<BookAuthor, BookAuthorDto>();
             CreateMap<BookAuthorRegisterDto, BookAuthor>();
+            CreateMap<BookAuthorUpdateDto, BookAuthor>();
         }
     }
 }

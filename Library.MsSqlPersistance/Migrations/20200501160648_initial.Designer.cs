@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.MsSqlPersistance.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20200410220112_initial")]
+    [Migration("20200501160648_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,8 +34,6 @@ namespace Library.MsSqlPersistance.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountTypeId");

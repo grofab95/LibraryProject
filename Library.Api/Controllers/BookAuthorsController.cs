@@ -5,6 +5,7 @@ using Library.Domain.Entities;
 using Library.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace Library.Api.Controllers
@@ -41,6 +42,34 @@ namespace Library.Api.Controllers
         public IActionResult GetAll()
         {
             return Ok(_mapper.Map<IList<BookAuthorDto>>(_authorDao.GetAll()));
+        }
+
+        [HttpPut]
+        public IActionResult Update(BookAuthorUpdateDto bookAuthorUpdateDto)
+        {
+            try
+            {
+                _authorDao.Update(_mapper.Map<BookAuthor>(bookAuthorUpdateDto));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{authorId}")]
+        public IActionResult Delete(int authorId)
+        {
+            try
+            {
+                _authorDao.Delete(authorId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

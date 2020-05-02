@@ -76,7 +76,7 @@ namespace Library.MsSqlPersistance.Dao
             return user;
         }
 
-        public void Update(User userParam, string password = null)
+        public void Update(User userParam)
         {
             var user = _context.Users.Find(userParam.UserId);
 
@@ -84,6 +84,7 @@ namespace Library.MsSqlPersistance.Dao
             {
                 throw new LibraryException("Użytkownik nie odnaleziony");
             }
+
             if (!string.IsNullOrWhiteSpace(userParam.Email) && userParam.Email != user.Email)
             {
                 if (_context.Users.Any(x => x.Email == userParam.Email))
@@ -92,21 +93,28 @@ namespace Library.MsSqlPersistance.Dao
                 }
                 user.Email = userParam.Email;
             }
+
             if (!string.IsNullOrWhiteSpace(userParam.Name))
             {
                 user.Surname = userParam.Name;
             }
+
             if (!string.IsNullOrWhiteSpace(userParam.Surname))
             {
                 user.Surname = userParam.Surname;
             }
-            if (!string.IsNullOrWhiteSpace(password))
+
+            if (userParam.AccountType != null)
             {
-                byte[] passwordHash, passwordSalt;
-                PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                user.AccountType = userParam.AccountType;
             }
+            //if (!string.IsNullOrWhiteSpace(password))
+            //{
+            //    byte[] passwordHash, passwordSalt;
+            //    PasswordHash.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            //    user.PasswordHash = passwordHash;
+            //    user.PasswordSalt = passwordSalt;
+            //}
             _context.Users.Update(user);
             _context.SaveChanges();
         }

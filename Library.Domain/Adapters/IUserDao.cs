@@ -9,7 +9,7 @@ namespace Library.Domain.Adapters
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Register(User user, string password);
-        void Update(User user, string password = null);
+        void Update(User user);
         void Delete(int id);
     }
 }

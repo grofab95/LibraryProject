@@ -94,14 +94,12 @@ namespace Library.Api.Controllers
             return Ok(_mapper.Map<UserDto>(_userDao.GetById(id)));
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserUpdateDto userUpdateDto)
+        [HttpPut]
+        public IActionResult Update(User user)
         {
-            var user = _mapper.Map<User>(userUpdateDto);
-            user.UserId = id;
             try
             {
-                _userDao.Update(user, userUpdateDto.Password);
+                _userDao.Update(user);
                 return Ok();
             }
             catch (LibraryException exception)
